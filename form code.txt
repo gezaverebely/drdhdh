@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+
+
+namespace filmekGUI
+{
+    public partial class Form1 : Form
+    {
+        void betoltes()
+        {
+            dgadatok.Rows.Clear();
+
+            string lekerdezes = "select nev, szuldatum, nemzet from szinesz order by nev";
+            Adatbazis ab = new Adatbazis(lekerdezes);
+            while (ab.Dr.Read())
+            {
+                dgadatok.Rows.Add(ab.Dr["nev"], ab.Dr["szuldatum"], ab.Dr["nemzet"]);
+            }
+            ab.Close();
+        }
+
+        void betoltes(string nemzet)
+        {
+            dgadatok.Rows.Clear();
+
+            string lekerdezes = $"select nev, szuldatum, nemzet from szinesz where nemzet = '{nemzet}' order by nev";
+            Adatbazis ab = new Adatbazis(lekerdezes);
+            while (ab.Dr.Read())
+            {
+                dgadatok.Rows.Add(ab.Dr["nev"], ab.Dr["szuldatum"], ab.Dr["nemzet"]);
+            }
+            ab.Close();
+        }
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void SzineszForm_Load(object sender, EventArgs e)
+        {
+            betoltes();
+        }
+
+        private void cbnemzetiseg_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //cbnemzetiseg.Items.Clear();
+            //cbnemzetiseg.DropDownStyle = ComboBoxStyle.DropDownList;
+
+            string lekerdezes = "select distinct nemzet from szinesz order by nemzet";
+            Adatbazis ab = new Adatbazis(lekerdezes);
+            while (ab.Dr.Read())
+            {
+                cbnemzetiseg.Items.Add(ab.Dr["nemzet"]);
+            }
+
+            ab.Close();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+
+        }
+    }
+}
